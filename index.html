@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Condomínio Padova</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --bg-color: #f3f4f6;
+            --card-bg: #ffffff;
+            --text: #1f2937;
+        }
+        * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text); margin: 0; padding: 20px; display: flex; justify-content: center; }
+        .container { background-color: var(--card-bg); padding: 30px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: 100%; max-width: 950px; }
+        h1, h2 { text-align: center; color: var(--primary); }
+        h3 { color: var(--primary-dark); margin-top: 0; border-bottom: 2px solid #e5e7eb; padding-bottom: 5px; }
+        
+        /* Ocultar seções por padrão */
+        .hidden { display: none !important; }
+        
+        /* Layout das sessões */
+        .modulo-box { background: #f8fafc; border: 1px solid #e2e8f0; padding: 20px; border-radius: 8px; margin-bottom: 30px; }
+        
+        /* Botões e Inputs */
+        button { background-color: var(--primary); color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; font-size: 16px; margin: 5px; transition: 0.2s; }
+        button:hover { opacity: 0.9; }
+        .btn-danger { background-color: #ef4444; }
+        .btn-warning { background-color: #f59e0b; color: white; }
+        .btn-secondary { background-color: #6b7280; }
+        input, select { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; font-size: 14px; }
+        
+        /* Box de Login */
+        .login-box { background: #f8fafc; border: 1px solid #e2e8f0; padding: 20px; border-radius: 8px; margin-top: 20px; max-width: 400px; margin-left: auto; margin-right: auto; }
+
+        /* Tabelas */
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 14px; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
+        th { background-color: #e2e8f0; }
+        .status-pendente { color: #d97706; font-weight: bold; }
+        .status-entregue { color: #16a34a; font-weight: bold; }
+        .status-saiu { color: #6b7280; font-style: italic; }
+
+        /* Utilitários */
+        .flex-center { display: flex; justify-content: center; gap: 20px; margin-top: 20px; }
+        .logout { float: right; background-color: #6b7280; font-size: 12px; }
+        .plantao-info { text-align: center; font-style: italic; color: #4b5563; margin-bottom: 20px; background: #e0f2fe; padding: 10px; border-radius: 5px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>📦 Condomínio Padova</h1>
+
+    <div id="login-screen">
+        <h2>Selecione seu acesso:</h2>
+        <div class="flex-center">
+            <button onclick="mostrarLoginADM()">Modo ADM 🏢</button>
+            <button onclick="mostrarLoginMorador()">Modo Morador 🏠</button>
+        </div>
+
+        <div id="login-adm-autenticacao" class="login-box hidden">
+            <h3 style="text-align: center;">Acesso Restrito - Portaria</h3>
+            
+            <label for="select-porteira"><strong>Quem está no Turno?</strong></label>
+            <select id="select-porteira">
+                <option value="Ketlyn Sabine">Ketlyn Sabine</option>
+                <option value="Sthefhanny Jesus">Sthefhanny Jesus</option>
+                <option value="Luciane Esther">Luciane Esther</option>
+            </select>
+
+            <label for="senha-adm"><strong>Senha de Acesso:</strong></label>
+            <input type="password" id="senha-adm" placeholder="Digite a senha">
+            
+            <div class="flex-center" style="margin-top: 10px;">
+                <button onclick="validarLoginADM()">Entrar</button>
+                <button class="btn-secondary" onclick="esconderLoginADM()">Cancelar</button>
+            </div>
+        </div>
+
+        <div id="login-morador-autenticacao" class="login-box hidden">
+            <h3 style="text-align: center;">Acesso do Morador</h3>
+            
+            <label for="input-nome-login"><strong>Seu Nome:</strong></label>
+            <input type="text" id="input-nome-login" placeholder="Ex: Maria" required>
+
+            <label for="input-apto-login"><strong>Qual o seu apartamento?</strong></label>
+            <input type="text" id="input-apto-login" placeholder="Ex: 101, 205..." required>
+            
+            <div class="flex-center" style="margin-top: 10px;">
+                <button onclick="validarLoginMorador()">Entrar</button>
+                <button class="btn-secondary" onclick="esconderLoginMorador()">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="porteiro-screen" class="hidden">
+        <button class="logout" onclick="fazerLogout()">Sair</button>
+        <h2>Painel da Portaria</h2>
+        <div class="plantao-info">🟢 Operador(a) online: <strong id="nome-porteira-ativa"></strong></div>
+        
+        <div class="modulo-box">
+            <h3>📬 Entrada de Entregas</h3>
+            <form id="form-encomenda" onsubmit="registrarEncomenda(event)">
+                <select id="tipo-volume" required>
+                    <option value="" disabled selected>Selecione o tipo...</option>
+                    <option value="📦 Encomenda">📦 Encomenda (Caixas, Pacotes)</option>
+                    <option value="✉️ Correspondência">✉️ Correspondência (Cartas, Boletos)</option>
+                </select>
+                <input type="text" id="apartamento-vol" placeholder="Número do Apartamento (ex: 101)" required>
+                <input type="text" id="destinatario-vol" placeholder="Nome do Morador" required>
+                <input type="text" id="descricao-vol" placeholder="Descrição (ex: Caixa da Shopee, Conta de Luz)" required>
+                <button type="submit">Registrar Entrada</button>
+            </form>
+
+            <table id="tabela-portaria-volumes">
+                <thead>
+                    <tr>
+                        <th>Apto</th>
+                        <th>Tipo</th>
+                        <th>Morador/Desc.</th>
+                        <th>Recebido por</th>
+                        <th>Status</th>
+                        <th>Ação</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+
+        <div class="modulo-box">
+            <h3>🚶‍♂️ Controle de Visitas e Prestadores</h3>
+            <form id="form-visita" onsubmit="registrarVisita(event)">
+                <input type="text" id="apartamento-vis" placeholder="Apartamento de Destino (ex: 101)" required>
+                <input type="text" id="nome-vis" placeholder="Nome do Visitante / Empresa" required>
+                <button type="submit" style="background-color: #10b981;">Liberar Entrada</button>
+            </form>
+
+            <table id="tabela-portaria-visitas">
+                <thead>
+                    <tr>
+                        <th>Apto</th>
+                        <th>Visitante</th>
+                        <th>Porteiro(a)</th>
+                        <th>Entrada</th>
+                        <th>Saída</th>
+                        <th>Ação</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="morador-screen" class="hidden">
+        <button class="logout" onclick="fazerLogout()">Sair</button>
+        <h2>Painel do Morador</h2>
+        <p style="text-align: center;">Bem-vindo(a), <strong id="nome-morador-logado"></strong>! Mostrando informações do <strong>Apto <span id="numero-apto-morador"></span></strong></p>
+
+        <div class="modulo-box">
+            <h3>📬 Minhas Encomendas e Correspondências</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Tipo</th>
+                        <th>Descrição</th>
+                        <th>Portaria</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="tabela-morador-volumes"></tbody>
+            </table>
+        </div>
+
+        <div class="modulo-box">
+            <h3>🚶‍♂️ Minhas Visitas</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Visitante</th>
+                        <th>Portaria</th>
+                        <th>Entrada</th>
+                        <th>Saída</th>
+                    </tr>
+                </thead>
+                <tbody id="tabela-morador-visitas"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    let porteiraAtiva = "";
+    let apartamentoLogado = ""; 
+    let moradorLogado = "";
+
+    // Banco de Dados Simulado
+    let volumes = [
+        { id: 1, apto: '101', tipo: '📦 Encomenda', nome: 'João Silva', descricao: 'Pacote Correios', status: 'Pendente', recebidoPor: 'Ketlyn Sabine' },
+        { id: 2, apto: '205', tipo: '✉️ Correspondência', nome: 'Maria Souza', descricao: 'Boleto Condomínio', status: 'Pendente', recebidoPor: 'Luciane Esther' }
+    ];
+
+    let visitas = [
+        { id: 1, apto: '101', nome: 'Carlos Eduardo (Net Claro)', porteira: 'Sthefhanny Jesus', entrada: '14:30', saida: '-' }
+    ];
+
+    // Formata a hora atual
+    function obterHoraAtual() {
+        const data = new Date();
+        return data.getHours().toString().padStart(2, '0') + ':' + data.getMinutes().toString().padStart(2, '0');
+    }
+
+    // --- CONTROLE DE LOGIN ADM ---
+    function mostrarLoginADM() { 
+        document.getElementById('login-adm-autenticacao').classList.remove('hidden'); 
+        esconderLoginMorador();
+    }
+    
+    function esconderLoginADM() { 
+        document.getElementById('login-adm-autenticacao').classList.add('hidden');
+        document.getElementById('senha-adm').value = ""; 
+    }
+
+    function validarLoginADM() {
+        const senha = document.getElementById('senha-adm').value;
+        if (senha === "1601") {
+            porteiraAtiva = document.getElementById('select-porteira').value;
+            document.getElementById('nome-porteira-ativa').innerText = porteiraAtiva;
+            document.getElementById('login-screen').classList.add('hidden');
+            document.getElementById('porteiro-screen').classList.remove('hidden');
+            esconderLoginADM();
+            atualizarTabelas();
+        } else {
+            alert("Senha incorreta! Acesso negado.");
+        }
+    }
+
+    // --- CONTROLE DE LOGIN MORADOR ---
+    function mostrarLoginMorador() {
+        document.getElementById('login-morador-autenticacao').classList.remove('hidden');
+        esconderLoginADM();
+    }
+
+    function esconderLoginMorador() {
+        document.getElementById('login-morador-autenticacao').classList.add('hidden');
+        document.getElementById('input-nome-login').value = "";
+        document.getElementById('input-apto-login').value = "";
+    }
+
+    function validarLoginMorador() {
+        const nome = document.getElementById('input-nome-login').value.trim();
+        const apto = document.getElementById('input-apto-login').value.trim();
+        
+        if (nome !== "" && apto !== "") {
+            moradorLogado = nome;
+            apartamentoLogado = apto;
+            
+            document.getElementById('nome-morador-logado').innerText = moradorLogado;
+            document.getElementById('numero-apto-morador').innerText = apartamentoLogado;
+            
+            document.getElementById('login-screen').classList.add('hidden');
+            document.getElementById('morador-screen').classList.remove('hidden');
+            esconderLoginMorador();
+            atualizarTabelas();
+        } else {
+            alert("Por favor, preencha o seu nome e o número do apartamento.");
+        }
+    }
+
+    // --- LOGOUT GERAL ---
+    function fazerLogout() {
+        document.getElementById('porteiro-screen').classList.add('hidden');
+        document.getElementById('morador-screen').classList.add('hidden');
+        document.getElementById('login-screen').classList.remove('hidden');
+        porteiraAtiva = ""; 
+        apartamentoLogado = "";
+        moradorLogado = "";
+    }
+
+    // ----- LÓGICA DE VOLUMES E VISITAS -----
+    function registrarEncomenda(event) {
+        event.preventDefault();
+        const novoVolume = {
+            id: Date.now(),
+            apto: document.getElementById('apartamento-vol').value,
+            tipo: document.getElementById('tipo-volume').value,
+            nome: document.getElementById('destinatario-vol').value,
+            descricao: document.getElementById('descricao-vol').value,
+            status: 'Pendente',
+            recebidoPor: porteiraAtiva
+        };
+        volumes.push(novoVolume);
+        document.getElementById('form-encomenda').reset();
+        atualizarTabelas();
+    }
+
+    function darBaixaVolume(id) {
+        const item = volumes.find(v => v.id === id);
+        if (item) {
+            item.status = 'Retirado';
+            atualizarTabelas();
+        }
+    }
+
+    function registrarVisita(event) {
+        event.preventDefault();
+        const novaVisita = {
+            id: Date.now(),
+            apto: document.getElementById('apartamento-vis').value,
+            nome: document.getElementById('nome-vis').value,
+            porteira: porteiraAtiva,
+            entrada: obterHoraAtual(),
+            saida: '-'
+        };
+        visitas.push(novaVisita);
+        document.getElementById('form-visita').reset();
+        atualizarTabelas();
+    }
+
+    function registrarSaidaVisita(id) {
+        const visita = visitas.find(v => v.id === id);
+        if (visita) {
+            visita.saida = obterHoraAtual();
+            atualizarTabelas();
+        }
+    }
+
+    // ----- ATUALIZAÇÃO DA TELA -----
+    function atualizarTabelas() {
+        const tbPortariaVol = document.querySelector('#tabela-portaria-volumes tbody');
+        const tbMoradorVol = document.getElementById('tabela-morador-volumes');
+        const tbPortariaVis = document.querySelector('#tabela-portaria-visitas tbody');
+        const tbMoradorVis = document.getElementById('tabela-morador-visitas');
+        
+        tbPortariaVol.innerHTML = ''; tbMoradorVol.innerHTML = '';
+        tbPortariaVis.innerHTML = ''; tbMoradorVis.innerHTML = '';
+
+        volumes.forEach(vol => {
+            tbPortariaVol.innerHTML += `
+                <tr>
+                    <td><strong>${vol.apto}</strong></td>
+                    <td>${vol.tipo}</td>
+                    <td>${vol.nome}<br><small>${vol.descricao}</small></td>
+                    <td>${vol.recebidoPor}</td>
+                    <td class="${vol.status === 'Pendente' ? 'status-pendente' : 'status-entregue'}">${vol.status}</td>
+                    <td>${vol.status === 'Pendente' ? `<button class="btn-danger" onclick="darBaixaVolume(${vol.id})">Entregar</button>` : '📋 OK'}</td>
+                </tr>
+            `;
+            if (vol.apto === apartamentoLogado) {
+                tbMoradorVol.innerHTML += `
+                    <tr>
+                        <td>${vol.tipo}</td>
+                        <td>${vol.descricao}</td>
+                        <td>${vol.recebidoPor}</td>
+                        <td class="${vol.status === 'Pendente' ? 'status-pendente' : 'status-entregue'}">${vol.status}</td>
+                    </tr>
+                `;
+            }
+        });
+
+        visitas.forEach(vis => {
+            tbPortariaVis.innerHTML += `
+                <tr>
+                    <td><strong>${vis.apto}</strong></td>
+                    <td>${vis.nome}</td>
+                    <td>${vis.porteira}</td>
+                    <td>${vis.entrada}</td>
+                    <td class="${vis.saida !== '-' ? 'status-saiu' : ''}">${vis.saida}</td>
+                    <td>${vis.saida === '-' ? `<button class="btn-warning" onclick="registrarSaidaVisita(${vis.id})">Marcar Saída</button>` : '📋 Encerrado'}</td>
+                </tr>
+            `;
+            if (vis.apto === apartamentoLogado) {
+                tbMoradorVis.innerHTML += `
+                    <tr>
+                        <td>${vis.nome}</td>
+                        <td>${vis.porteira}</td>
+                        <td>${vis.entrada}</td>
+                        <td class="${vis.saida !== '-' ? 'status-saiu' : 'status-pendente'}">${vis.saida === '-' ? 'No Condomínio' : vis.saida}</td>
+                    </tr>
+                `;
+            }
+        });
+    }
+</script>
+
+</body>
+</html>
