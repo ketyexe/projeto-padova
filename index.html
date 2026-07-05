@@ -3,50 +3,280 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Condomínio Padova</title>
+    <title>Condomínio Padova - Portaria Inteligente</title>
     <style>
         :root {
-            --primary: #2563eb;
-            --primary-dark: #1d4ed8;
-            --bg-color: #f3f4f6;
-            --card-bg: #ffffff;
-            --text: #1f2937;
+            --primary: #1e3a8a;
+            --primary-light: #3b82f6;
+            --primary-dark: #172554;
+            --success: #10b981;
+            --success-bg: #d1fae5;
+            --warning: #f59e0b;
+            --warning-bg: #fef3c7;
+            --danger: #ef4444;
+            --danger-bg: #fee2e2;
+            --gray-light: #f8fafc;
+            --gray-border: #e2e8f0;
+            --text-main: #334155;
+            --text-dark: #0f172a;
         }
-        * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: var(--bg-color); color: var(--text); margin: 0; padding: 20px; display: flex; justify-content: center; }
-        .container { background-color: var(--card-bg); padding: 30px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: 100%; max-width: 950px; }
-        h1, h2 { text-align: center; color: var(--primary); }
-        h3 { color: var(--primary-dark); margin-top: 0; border-bottom: 2px solid #e5e7eb; padding-bottom: 5px; }
+
+        * { 
+            box-sizing: border-box; 
+            font-family: 'Inter', system-ui, -apple-system, sans-serif; 
+            margin: 0;
+            padding: 0;
+        }
+
+        body { 
+            background-color: #f1f5f9; 
+            color: var(--text-main); 
+            padding: 40px 20px; 
+            display: flex; 
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container { 
+            background-color: #ffffff; 
+            padding: 40px; 
+            border-radius: 16px; 
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05); 
+            width: 100%; 
+            max-width: 1100px; 
+        }
+
+        h1 {
+            text-align: center; 
+            color: var(--primary-dark);
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 30px;
+            letter-spacing: -0.5px;
+        }
+
+        h2 { 
+            text-align: center; 
+            color: var(--text-dark);
+            font-size: 20px;
+            margin-bottom: 25px;
+        }
+
+        h3 { 
+            color: var(--primary); 
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 15px; 
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--gray-border);
+        }
         
-        /* Ocultar seções por padrão */
         .hidden { display: none !important; }
         
-        /* Layout das sessões */
-        .modulo-box { background: #f8fafc; border: 1px solid #e2e8f0; padding: 20px; border-radius: 8px; margin-bottom: 30px; }
+        /* Layout dos Módulos */
+        .modulo-box { 
+            background: var(--gray-light); 
+            border: 1px solid var(--gray-border); 
+            padding: 24px; 
+            border-radius: 12px; 
+            margin-bottom: 25px; 
+        }
         
-        /* Botões e Inputs */
-        button { background-color: var(--primary); color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; font-size: 16px; margin: 5px; transition: 0.2s; }
-        button:hover { opacity: 0.9; }
-        .btn-danger { background-color: #ef4444; }
-        .btn-warning { background-color: #f59e0b; color: white; }
-        .btn-secondary { background-color: #6b7280; }
-        input, select { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; font-size: 14px; }
+        /* Formulários inline */
+        form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        form button {
+            margin: 0;
+            height: 100%;
+        }
         
-        /* Box de Login */
-        .login-box { background: #f8fafc; border: 1px solid #e2e8f0; padding: 20px; border-radius: 8px; margin-top: 20px; max-width: 400px; margin-left: auto; margin-right: auto; }
+        /* Botões */
+        button { 
+            background-color: var(--primary); 
+            color: white; 
+            border: none; 
+            padding: 12px 20px; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            font-size: 14px; 
+            font-weight: 500;
+            transition: all 0.2s ease;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
 
-        /* Tabelas */
-        table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 14px; }
-        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
-        th { background-color: #e2e8f0; }
-        .status-pendente { color: #d97706; font-weight: bold; }
-        .status-entregue { color: #16a34a; font-weight: bold; }
-        .status-saiu { color: #6b7280; font-style: italic; }
+        button:hover { 
+            background-color: var(--primary-dark);
+            transform: translateY(-1px);
+        }
 
-        /* Utilitários */
-        .flex-center { display: flex; justify-content: center; gap: 20px; margin-top: 20px; }
-        .logout { float: right; background-color: #6b7280; font-size: 12px; }
-        .plantao-info { text-align: center; font-style: italic; color: #4b5563; margin-bottom: 20px; background: #e0f2fe; padding: 10px; border-radius: 5px; }
+        .btn-action {
+            padding: 6px 12px;
+            font-size: 12px;
+            border-radius: 6px;
+        }
+
+        .btn-danger { background-color: var(--danger); }
+        .btn-danger:hover { background-color: #dc2626; }
+
+        .btn-warning { background-color: var(--warning); color: #713f12; }
+        .btn-warning:hover { background-color: #d97706; }
+
+        .btn-secondary { background-color: #64748b; }
+        .btn-secondary:hover { background-color: #475569; }
+
+        .btn-delete {
+            background-color: transparent;
+            color: var(--danger);
+            border: 1px solid var(--danger);
+            padding: 4px 8px;
+            font-size: 11px;
+            box-shadow: none;
+        }
+        .btn-delete:hover {
+            background-color: var(--danger-bg);
+            color: #dc2626;
+            transform: none;
+        }
+        
+        /* Inputs e Selects */
+        input, select { 
+            width: 100%; 
+            padding: 12px; 
+            border: 1px solid #cbd5e1; 
+            border-radius: 8px; 
+            font-size: 14px; 
+            color: var(--text-dark);
+            background-color: #ffffff;
+            transition: border-color 0.2s;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--primary-light);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        /* Box de Login Individual */
+        .login-box { 
+            background: var(--gray-light); 
+            border: 1px solid var(--gray-border); 
+            padding: 30px; 
+            border-radius: 12px; 
+            margin-top: 25px; 
+            max-width: 420px; 
+            margin-left: auto; 
+            margin-right: auto; 
+        }
+
+        .login-box label {
+            display: block;
+            font-size: 13px;
+            font-weight: 500;
+            color: #475569;
+            margin-top: 12px;
+        }
+
+        .login-box input, .login-box select {
+            margin-top: 4px;
+            margin-bottom: 4px;
+        }
+
+        /* Tabelas Modernizadas */
+        .table-container {
+            overflow-x: auto;
+            border-radius: 8px;
+            border: 1px solid var(--gray-border);
+            background: #ffffff;
+        }
+
+        table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            font-size: 13px; 
+            text-align: left;
+        }
+
+        th, td { 
+            padding: 12px 14px; 
+            border-bottom: 1px solid var(--gray-border); 
+            vertical-align: middle;
+        }
+
+        th { 
+            background-color: #f1f5f9; 
+            color: #475569;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 10px;
+            letter-spacing: 0.5px;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover td {
+            background-color: #f8fafc;
+        }
+
+        /* Badges de Status Estilizadas */
+        .status-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .status-pendente { background-color: var(--warning-bg); color: #92400e; }
+        .status-entregue { background-color: var(--success-bg); color: #065f46; }
+        .status-saiu { background-color: #e2e8f0; color: #475569; }
+
+        /* Utilitários de Layout */
+        .flex-center { 
+            display: flex; 
+            justify-content: center; 
+            gap: 15px; 
+            margin-top: 20px; 
+        }
+
+        .logout { 
+            float: right; 
+            background-color: #64748b; 
+            font-size: 12px; 
+            padding: 8px 14px;
+        }
+
+        .plantao-info { 
+            text-align: center; 
+            font-size: 14px;
+            color: var(--primary-dark); 
+            margin-bottom: 25px; 
+            background: #eff6ff; 
+            border: 1px solid #bfdbfe;
+            padding: 12px; 
+            border-radius: 8px; 
+        }
+
+        .welcome-text {
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 15px;
+            color: #475569;
+        }
+
+        .info-sub {
+            font-size: 11px;
+            color: #64748b;
+            margin-top: 2px;
+        }
     </style>
 </head>
 <body>
@@ -55,41 +285,41 @@
     <h1>📦 Condomínio Padova</h1>
 
     <div id="login-screen">
-        <h2>Selecione seu acesso:</h2>
+        <h2>Selecione seu modo de acesso:</h2>
         <div class="flex-center">
             <button onclick="mostrarLoginADM()">Modo ADM 🏢</button>
             <button onclick="mostrarLoginMorador()">Modo Morador 🏠</button>
         </div>
 
         <div id="login-adm-autenticacao" class="login-box hidden">
-            <h3 style="text-align: center;">Acesso Restrito - Portaria</h3>
+            <h3 style="text-align: center; border: none; margin: 0;">Portaria - Acesso Restrito</h3>
             
-            <label for="select-porteira"><strong>Quem está no Turno?</strong></label>
+            <label for="select-porteira">Quem está no turno?</label>
             <select id="select-porteira">
                 <option value="Ketlyn Sabine">Ketlyn Sabine</option>
                 <option value="Sthefhanny Jesus">Sthefhanny Jesus</option>
                 <option value="Luciane Esther">Luciane Esther</option>
             </select>
 
-            <label for="senha-adm"><strong>Senha de Acesso:</strong></label>
-            <input type="password" id="senha-adm" placeholder="Digite a senha">
+            <label for="senha-adm">Senha de Acesso</label>
+            <input type="password" id="senha-adm" placeholder="Digite a senha de 4 dígitos">
             
-            <div class="flex-center" style="margin-top: 10px;">
+            <div class="flex-center" style="margin-top: 15px;">
                 <button onclick="validarLoginADM()">Entrar</button>
                 <button class="btn-secondary" onclick="esconderLoginADM()">Cancelar</button>
             </div>
         </div>
 
         <div id="login-morador-autenticacao" class="login-box hidden">
-            <h3 style="text-align: center;">Acesso do Morador</h3>
+            <h3 style="text-align: center; border: none; margin: 0;">Acesso do Morador</h3>
             
-            <label for="input-nome-login"><strong>Seu Nome:</strong></label>
+            <label for="input-nome-login">Seu Nome</label>
             <input type="text" id="input-nome-login" placeholder="Ex: Maria" required>
 
-            <label for="input-apto-login"><strong>Qual o seu apartamento?</strong></label>
+            <label for="input-apto-login">Número do Apartamento</label>
             <input type="text" id="input-apto-login" placeholder="Ex: 101, 205..." required>
             
-            <div class="flex-center" style="margin-top: 10px;">
+            <div class="flex-center" style="margin-top: 15px;">
                 <button onclick="validarLoginMorador()">Entrar</button>
                 <button class="btn-secondary" onclick="esconderLoginMorador()">Cancelar</button>
             </div>
@@ -97,133 +327,165 @@
     </div>
 
     <div id="porteiro-screen" class="hidden">
-        <button class="logout" onclick="fazerLogout()">Sair</button>
-        <h2>Painel da Portaria</h2>
-        <div class="plantao-info">🟢 Operador(a) online: <strong id="nome-porteira-ativa"></strong></div>
+        <button class="logout" onclick="fazerLogout()">Sair do Painel</button>
+        <h2>Painel de Controle da Portaria</h2>
+        <div class="plantao-info">🟢 Operador(a) em atividade: <strong id="nome-porteira-ativa"></strong></div>
         
         <div class="modulo-box">
-            <h3>📬 Entrada de Entregas</h3>
+            <h3>📬 Registro de Pacotes & Correspondências</h3>
             <form id="form-encomenda" onsubmit="registrarEncomenda(event)">
                 <select id="tipo-volume" required>
-                    <option value="" disabled selected>Selecione o tipo...</option>
+                    <option value="" disabled selected>Tipo de pacote...</option>
                     <option value="📦 Encomenda">📦 Encomenda (Caixas, Pacotes)</option>
                     <option value="✉️ Correspondência">✉️ Correspondência (Cartas, Boletos)</option>
                 </select>
-                <input type="text" id="apartamento-vol" placeholder="Número do Apartamento (ex: 101)" required>
+                <input type="text" id="apartamento-vol" placeholder="Apartamento (ex: 101)" required>
                 <input type="text" id="destinatario-vol" placeholder="Nome do Morador" required>
-                <input type="text" id="descricao-vol" placeholder="Descrição (ex: Caixa da Shopee, Conta de Luz)" required>
+                <input type="text" id="descricao-vol" placeholder="Descrição (ex: Shopee, Conta de Luz)" required>
                 <button type="submit">Registrar Entrada</button>
             </form>
 
-            <table id="tabela-portaria-volumes">
-                <thead>
-                    <tr>
-                        <th>Apto</th>
-                        <th>Tipo</th>
-                        <th>Morador/Desc.</th>
-                        <th>Recebido por</th>
-                        <th>Status</th>
-                        <th>Ação</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
+            <div class="table-container">
+                <table id="tabela-portaria-volumes">
+                    <thead>
+                        <tr>
+                            <th>Apto</th>
+                            <th>Tipo</th>
+                            <th>Morador / Descrição</th>
+                            <th>Entrada (Porteiro / Hora)</th>
+                            <th>Retirada (Quem / Hora)</th>
+                            <th>Status</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
         </div>
 
         <div class="modulo-box">
-            <h3>🚶‍♂️ Controle de Visitas e Prestadores</h3>
+            <h3>🚶‍♂️ Controle de Visitantes & Prestadores</h3>
             <form id="form-visita" onsubmit="registrarVisita(event)">
-                <input type="text" id="apartamento-vis" placeholder="Apartamento de Destino (ex: 101)" required>
-                <input type="text" id="nome-vis" placeholder="Nome do Visitante / Empresa" required>
-                <button type="submit" style="background-color: #10b981;">Liberar Entrada</button>
+                <input type="text" id="apartamento-vis" placeholder="Apto de Destino (ex: 101)" required>
+                <input type="text" id="nome-vis" placeholder="Nome do Visitante ou Empresa" required>
+                <button type="submit" style="background-color: var(--success);">Liberar Entrada</button>
             </form>
 
-            <table id="tabela-portaria-visitas">
-                <thead>
-                    <tr>
-                        <th>Apto</th>
-                        <th>Visitante</th>
-                        <th>Porteiro(a)</th>
-                        <th>Entrada</th>
-                        <th>Saída</th>
-                        <th>Ação</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
+            <div class="table-container">
+                <table id="tabela-portaria-visitas">
+                    <thead>
+                        <tr>
+                            <th>Apto</th>
+                            <th>Visitante / Empresa</th>
+                            <th>Porteiro(a)</th>
+                            <th>Entrada</th>
+                            <th>Saída</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
         </div>
     </div>
 
     <div id="morador-screen" class="hidden">
         <button class="logout" onclick="fazerLogout()">Sair</button>
         <h2>Painel do Morador</h2>
-        <p style="text-align: center;">Bem-vindo(a), <strong id="nome-morador-logado"></strong>! Mostrando informações do <strong>Apto <span id="numero-apto-morador"></span></strong></p>
+        <p class="welcome-text">Seja bem-vindo(a), <strong id="nome-morador-logado" style="color: var(--text-dark);"></strong>! Monitorando as atividades do <strong style="color: var(--primary);">Apto <span id="numero-apto-morador"></span></strong></p>
 
         <div class="modulo-box">
-            <h3>📬 Minhas Encomendas e Correspondências</h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Tipo</th>
-                        <th>Descrição</th>
-                        <th>Portaria</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody id="tabela-morador-volumes"></tbody>
-            </table>
+            <h3>📬 Meus Pacotes na Portaria</h3>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Tipo</th>
+                            <th>Descrição do Item</th>
+                            <th>Entrada na Portaria</th>
+                            <th>Histórico de Retirada</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabela-morador-volumes"></tbody>
+                </table>
+            </div>
         </div>
 
         <div class="modulo-box">
-            <h3>🚶‍♂️ Minhas Visitas</h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Visitante</th>
-                        <th>Portaria</th>
-                        <th>Entrada</th>
-                        <th>Saída</th>
-                    </tr>
-                </thead>
-                <tbody id="tabela-morador-visitas"></tbody>
-            </table>
+            <h3>🚶‍♂️ Histórico de Visitas Vinculadas</h3>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nome do Visitante</th>
+                            <th>Responsável na Portaria</th>
+                            <th>Horário Entrada</th>
+                            <th>Horário Saída</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabela-morador-visitas"></tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
 
-<script>
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, collection, addDoc, onSnapshot, updateDoc, doc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    // 🔐 CREDENCIAIS DO SEU PROJETO FIREBASE VINCULADAS:
+    const firebaseConfig = {
+        apiKey: "AIzaSyA0CyYlcyWXIjr1iqH5SzL5rlukuEVlFBU",
+        authDomain: "portaria-padova.firebaseapp.com",
+        projectId: "portaria-padova",
+        storageBucket: "portaria-padova.firebasestorage.app",
+        messagingSenderId: "10323763486",
+        appId: "1:10323763486:web:3ef754cb30fcc44f51690f"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
     let porteiraAtiva = "";
     let apartamentoLogado = ""; 
     let moradorLogado = "";
+    let volumes = [];
+    let visitas = [];
 
-    // Banco de Dados Simulado
-    let volumes = [
-        { id: 1, apto: '101', tipo: '📦 Encomenda', nome: 'João Silva', descricao: 'Pacote Correios', status: 'Pendente', recebidoPor: 'Ketlyn Sabine' },
-        { id: 2, apto: '205', tipo: '✉️ Correspondência', nome: 'Maria Souza', descricao: 'Boleto Condomínio', status: 'Pendente', recebidoPor: 'Luciane Esther' }
-    ];
-
-    let visitas = [
-        { id: 1, apto: '101', nome: 'Carlos Eduardo (Net Claro)', porteira: 'Sthefhanny Jesus', entrada: '14:30', saida: '-' }
-    ];
-
-    // Formata a hora atual
     function obterHoraAtual() {
         const data = new Date();
         return data.getHours().toString().padStart(2, '0') + ':' + data.getMinutes().toString().padStart(2, '0');
     }
 
-    // --- CONTROLE DE LOGIN ADM ---
-    function mostrarLoginADM() { 
+    onSnapshot(collection(db, "volumes"), (snapshot) => {
+        volumes = [];
+        snapshot.forEach((doc) => {
+            volumes.push({ id: doc.id, ...doc.data() });
+        });
+        atualizarTabelas();
+    });
+
+    onSnapshot(collection(db, "visitas"), (snapshot) => {
+        visitas = [];
+        snapshot.forEach((doc) => {
+            visitas.push({ id: doc.id, ...doc.data() });
+        });
+        atualizarTabelas();
+    });
+
+    window.mostrarLoginADM = function() { 
         document.getElementById('login-adm-autenticacao').classList.remove('hidden'); 
         esconderLoginMorador();
     }
     
-    function esconderLoginADM() { 
+    window.esconderLoginADM = function() { 
         document.getElementById('login-adm-autenticacao').classList.add('hidden');
         document.getElementById('senha-adm').value = ""; 
     }
 
-    function validarLoginADM() {
+    window.validarLoginADM = function() {
         const senha = document.getElementById('senha-adm').value;
         if (senha === "1601") {
             porteiraAtiva = document.getElementById('select-porteira').value;
@@ -237,19 +499,18 @@
         }
     }
 
-    // --- CONTROLE DE LOGIN MORADOR ---
-    function mostrarLoginMorador() {
+    window.mostrarLoginMorador = function() {
         document.getElementById('login-morador-autenticacao').classList.remove('hidden');
         esconderLoginADM();
     }
 
-    function esconderLoginMorador() {
+    window.esconderLoginMorador = function() {
         document.getElementById('login-morador-autenticacao').classList.add('hidden');
         document.getElementById('input-nome-login').value = "";
         document.getElementById('input-apto-login').value = "";
     }
 
-    function validarLoginMorador() {
+    window.validarLoginMorador = function() {
         const nome = document.getElementById('input-nome-login').value.trim();
         const apto = document.getElementById('input-apto-login').value.trim();
         
@@ -269,8 +530,7 @@
         }
     }
 
-    // --- LOGOUT GERAL ---
-    function fazerLogout() {
+    window.fazerLogout = function() {
         document.getElementById('porteiro-screen').classList.add('hidden');
         document.getElementById('morador-screen').classList.add('hidden');
         document.getElementById('login-screen').classList.remove('hidden');
@@ -279,111 +539,149 @@
         moradorLogado = "";
     }
 
-    // ----- LÓGICA DE VOLUMES E VISITAS -----
-    function registrarEncomenda(event) {
+    window.registrarEncomenda = async function(event) {
         event.preventDefault();
         const novoVolume = {
-            id: Date.now(),
             apto: document.getElementById('apartamento-vol').value,
             tipo: document.getElementById('tipo-volume').value,
             nome: document.getElementById('destinatario-vol').value,
             descricao: document.getElementById('descricao-vol').value,
             status: 'Pendente',
-            recebidoPor: porteiraAtiva
+            recebidoPor: porteiraAtiva,
+            horaEntrada: obterHoraAtual(),
+            quemRetirou: '-',
+            horaRetirada: '-',
+            criadoEm: Date.now()
         };
-        volumes.push(novoVolume);
+        
+        await addDoc(collection(db, "volumes"), novoVolume);
         document.getElementById('form-encomenda').reset();
-        atualizarTabelas();
     }
 
-    function darBaixaVolume(id) {
-        const item = volumes.find(v => v.id === id);
-        if (item) {
-            item.status = 'Retirado';
-            atualizarTabelas();
+    window.darBaixaVolume = async function(id) {
+        const quemEmprestou = prompt("Quem está retirando este pacote?");
+        if (quemEmprestou === null) return; 
+        const nomeFinal = quemEmprestou.trim() === "" ? "Morador" : quemEmprestou.trim();
+
+        const itemRef = doc(db, "volumes", id);
+        await updateDoc(itemRef, { 
+            status: 'Retirado',
+            quemRetirou: nomeFinal,
+            horaRetirada: obterHoraAtual()
+        });
+    }
+
+    window.excluirVolume = async function(id) {
+        if(confirm("Tem certeza que deseja apagar definitivamente o registro deste pacote do histórico?")) {
+            await deleteDoc(doc(db, "volumes", id));
         }
     }
 
-    function registrarVisita(event) {
+    window.registrarVisita = async function(event) {
         event.preventDefault();
         const novaVisita = {
-            id: Date.now(),
             apto: document.getElementById('apartamento-vis').value,
             nome: document.getElementById('nome-vis').value,
             porteira: porteiraAtiva,
             entrada: obterHoraAtual(),
-            saida: '-'
+            saida: '-',
+            criadoEm: Date.now()
         };
-        visitas.push(novaVisita);
+        
+        await addDoc(collection(db, "visitas"), novaVisita);
         document.getElementById('form-visita').reset();
-        atualizarTabelas();
     }
 
-    function registrarSaidaVisita(id) {
-        const visita = visitas.find(v => v.id === id);
-        if (visita) {
-            visita.saida = obterHoraAtual();
-            atualizarTabelas();
+    window.registrarSaidaVisita = async function(id) {
+        const visitaRef = doc(db, "visitas", id);
+        await updateDoc(visitaRef, { saida: obterHoraAtual() });
+    }
+
+    window.excluirVisita = async function(id) {
+        if(confirm("Tem certeza que deseja apagar definitivamente esta visita do histórico?")) {
+            await deleteDoc(doc(db, "visitas", id));
         }
     }
 
-    // ----- ATUALIZAÇÃO DA TELA -----
     function atualizarTabelas() {
         const tbPortariaVol = document.querySelector('#tabela-portaria-volumes tbody');
         const tbMoradorVol = document.getElementById('tabela-morador-volumes');
         const tbPortariaVis = document.querySelector('#tabela-portaria-visitas tbody');
         const tbMoradorVis = document.getElementById('tabela-morador-visitas');
         
+        if(!tbPortariaVol) return;
+
         tbPortariaVol.innerHTML = ''; tbMoradorVol.innerHTML = '';
         tbPortariaVis.innerHTML = ''; tbMoradorVis.innerHTML = '';
 
-        volumes.forEach(vol => {
+        const volumesOrdenados = [...volumes].sort((a,b) => b.criadoEm - a.criadoEm);
+        const visitasOrdenadas = [...visitas].sort((a,b) => b.criadoEm - a.criadoEm);
+
+        volumesOrdenados.forEach(vol => {
+            const classeStatus = vol.status === 'Pendente' ? 'status-pendente' : 'status-entregue';
+            
             tbPortariaVol.innerHTML += `
                 <tr>
                     <td><strong>${vol.apto}</strong></td>
                     <td>${vol.tipo}</td>
-                    <td>${vol.nome}<br><small>${vol.descricao}</small></td>
-                    <td>${vol.recebidoPor}</td>
-                    <td class="${vol.status === 'Pendente' ? 'status-pendente' : 'status-entregue'}">${vol.status}</td>
-                    <td>${vol.status === 'Pendente' ? `<button class="btn-danger" onclick="darBaixaVolume(${vol.id})">Entregar</button>` : '📋 OK'}</td>
+                    <td><span style="color: var(--text-dark); font-weight: 500;">${vol.nome}</span><br><small style="color: #64748b;">${vol.descricao}</small></td>
+                    <td>${vol.recebidoPor}<div class="info-sub">às ${vol.horaEntrada || '-'}</div></td>
+                    <td>${vol.quemRetirou || '-'}${vol.horaRetirada && vol.horaRetirada !== '-' ? `<div class="info-sub">às ${vol.horaRetirada}</div>` : ''}</td>
+                    <td><span class="status-badge ${classeStatus}">${vol.status}</span></td>
+                    <td>
+                        <div style="display:flex; gap: 5px; align-items:center;">
+                            ${vol.status === 'Pendente' ? `<button class="btn-action btn-danger" onclick="darBaixaVolume('${vol.id}')">Entregar</button>` : '<span style="color:var(--success); font-weight:500;">📋 Entregue</span>'}
+                            <button class="btn-action btn-delete" onclick="excluirVolume('${vol.id}')">Apagar</button>
+                        </div>
+                    </td>
                 </tr>
             `;
+            
             if (vol.apto === apartamentoLogado) {
                 tbMoradorVol.innerHTML += `
                     <tr>
                         <td>${vol.tipo}</td>
                         <td>${vol.descricao}</td>
-                        <td>${vol.recebidoPor}</td>
-                        <td class="${vol.status === 'Pendente' ? 'status-pendente' : 'status-entregue'}">${vol.status}</td>
+                        <td>${vol.recebidoPor}<div class="info-sub">Horário: ${vol.horaEntrada || '-'}</div></td>
+                        <td>${vol.status === 'Pendente' ? '-' : `${vol.quemRetirou}<div class="info-sub">Retirado às ${vol.horaRetirada || '-'}</div>`}</td>
+                        <td><span class="status-badge ${classeStatus}">${vol.status}</span></td>
                     </tr>
                 `;
             }
         });
 
-        visitas.forEach(vis => {
+        visitasOrdenadas.forEach(vis => {
+            const classeSaida = vis.saida !== '-' ? 'status-saiu' : 'status-pendente';
+            const textoMoradorSaida = vis.saida === '-' ? 'No Condomínio' : vis.saida;
+            
             tbPortariaVis.innerHTML += `
                 <tr>
                     <td><strong>${vis.apto}</strong></td>
-                    <td>${vis.nome}</td>
+                    <td><span style="color: var(--text-dark); font-weight: 500;">${vis.nome}</span></td>
                     <td>${vis.porteira}</td>
                     <td>${vis.entrada}</td>
-                    <td class="${vis.saida !== '-' ? 'status-saiu' : ''}">${vis.saida}</td>
-                    <td>${vis.saida === '-' ? `<button class="btn-warning" onclick="registrarSaidaVisita(${vis.id})">Marcar Saída</button>` : '📋 Encerrado'}</td>
+                    <td><span class="status-badge ${classeSaida}">${vis.saida}</span></td>
+                    <td>
+                        <div style="display:flex; gap: 5px; align-items:center;">
+                            ${vis.saida === '-' ? `<button class="btn-action btn-warning" onclick="registrarSaidaVisita('${vis.id}')">Marcar Saída</button>` : '<span style="color:#64748b;">📋 Finalizado</span>'}
+                            <button class="btn-action btn-delete" onclick="excluirVisita('${vis.id}')">Apagar</button>
+                        </div>
+                    </td>
                 </tr>
             `;
+            
             if (vis.apto === apartamentoLogado) {
                 tbMoradorVis.innerHTML += `
                     <tr>
                         <td>${vis.nome}</td>
                         <td>${vis.porteira}</td>
                         <td>${vis.entrada}</td>
-                        <td class="${vis.saida !== '-' ? 'status-saiu' : 'status-pendente'}">${vis.saida === '-' ? 'No Condomínio' : vis.saida}</td>
+                        <td><span class="status-badge ${classeSaida}">${textoMoradorSaida}</span></td>
                     </tr>
                 `;
             }
         });
     }
 </script>
-
 </body>
 </html>
